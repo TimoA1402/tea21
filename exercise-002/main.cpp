@@ -4,7 +4,8 @@
 #include <CLI/CLI.hpp>
 #include <vector>
 #include <random>
-#include <algorithm>  // für std::sort
+#include <algorithm>
+#include <chrono>
 
 #include "config.h"
 
@@ -45,8 +46,14 @@ auto main(int argc, char **argv) -> int
     }
     fmt::print("\n");
 
-    // Sortiere den Vektor
+    // Messe die Zeit für das Sortieren des Vektors
+    auto start = std::chrono::system_clock::now();
     std::sort(randomNumbers.begin(), randomNumbers.end());
+    auto end = std::chrono::system_clock::now();
+
+    // Berechne die vergangene Zeit und zeige sie an
+    auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    fmt::print("Sorting Time: {} nanoseconds\n", elapsed.count());
 
     // Zeige die sortierten Zahlen an
     fmt::print("Sorted Numbers: ");
