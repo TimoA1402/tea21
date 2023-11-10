@@ -4,6 +4,7 @@
 #include <CLI/CLI.hpp>
 #include <vector>
 #include <random>
+#include <algorithm>  // für std::sort
 
 #include "config.h"
 
@@ -39,6 +40,16 @@ auto main(int argc, char **argv) -> int
 
     // Zeige die zufälligen Zahlen an
     fmt::print("Random Numbers: ");
+    for (const auto &num : randomNumbers) {
+        fmt::print("{} ", num);
+    }
+    fmt::print("\n");
+
+    // Sortiere den Vektor
+    std::sort(randomNumbers.begin(), randomNumbers.end());
+
+    // Zeige die sortierten Zahlen an
+    fmt::print("Sorted Numbers: ");
     for (const auto &num : randomNumbers) {
         fmt::print("{} ", num);
     }
