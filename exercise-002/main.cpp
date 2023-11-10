@@ -13,8 +13,8 @@ auto main(int argc, char **argv) -> int
 {
     CLI::App app{PROJECT_NAME};
 
-    int count = 20;
-    app.add_option("-c,--count", count, "Set the count")->default_val(20);
+    int count = 100;
+    app.add_option("-c,--count", count, "Set the count")->default_val(100);
 
     try
     {
