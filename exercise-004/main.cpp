@@ -21,7 +21,7 @@ auto main(int argc, char **argv) -> int
         app.set_version_flag("-V,--version", fmt::format("{} {}", PROJECT_VER, PROJECT_BUILD_DATE));
             app.add_option("-f,--file",
             filename,
-            fmt::format("The filename for the Bitmap,  default: {}", DEFAULT_BMP_FILE));
+            fmt::format("The filename for the Bitmap,  default: {}", filename));
         app.parse(argc, argv);
     }
     catch (const CLI::ParseError &e)
@@ -35,9 +35,20 @@ auto main(int argc, char **argv) -> int
      * More info at https://fmt.dev/latest/api.html
      */
     fmt::print("Hello, {}!\n", app.get_name());
-    fmt::print("File: {}", filename);
+    fmt::print("File: {}\n", filename);
 
-    /* INSERT YOUR CODE HERE */
+    BMP bmp;
+    bmp.read(filename);
+
+    // Vorbereitung der Daten (angenommen)
+    std::vector<uint8_t> grey_buffer; // Grauwert-Pixel-Puffer
+    uint32_t width = 0; // Breite des Bildes
+    uint32_t height = 0; // Höhe des Bildes
+
+    // Annahme: Die Daten wurden gelesen und in grey_buffer, width und height gespeichert
+
+    // Aufruf der Funktion, um als ASCII-Kunst zu speichern
+    bmp.saveAsAsciiArt(grey_buffer, width, height, "output.txt");
 
     return 0; /* exit gracefully*/
 }
