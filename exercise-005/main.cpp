@@ -1,34 +1,104 @@
 #include <fmt/chrono.h>
 #include <fmt/format.h>
+#include<unistd.h>
+#include <chrono>
+#include <thread>
+
+
+
 
 #include "CLI/CLI.hpp"
 #include "config.h"
 
+
+
+
+
+  typedef enum {
+    DB_STATE_UP = 0,
+    DB_STATE_DOWN = 1,
+    DB_STATE_TOP = 2,
+    DB_STATE_BOTTOM = 3,
+    DB_STATE_MAX
+  } DebounceState_t;
+
+  DebounceState_t state  = DB_STATE_BOTTOM;
+
+
+  void stateMachine()
+  {
+    int input;
+    std::cin >> input;
+    switch(state)
+    {
+      case DB_STATE_UP:
+      
+          if(1 == input)
+          {
+            std::cout<<"1 für nächsten Status"<<std::endl;
+            state = DB_STATE_DOWN;
+            std::cout<<"Der aktuelle Status ist DOWN: " <<std::endl;
+          }
+          else if( 1 != input){
+            state = DB_STATE_TOP;
+            std::cout<<"Der aktuelle Status ist TOP: " <<std::endl;
+          }break;
+
+      case DB_STATE_DOWN:
+          if(1 == input)
+          {
+            state = DB_STATE_UP;
+            std::cout<<"Der aktuelle Status ist UP: " <<std::endl;
+          }
+          else if (1 != input){
+            state = DB_STATE_BOTTOM;
+            std::cout<<"Der aktuelle Status ist BOTTOM: " <<std::endl;
+          }break;
+
+      case DB_STATE_TOP:
+        if(1 ==input){
+            state = DB_STATE_DOWN;
+            std::cout<<"Der aktuelle Status ist DOWN: " <<std::endl;
+        }   
+        else{
+          std::cout<<"Der aktuelle Status ist TOP: " <<std::endl;
+        }
+        break;
+
+      case DB_STATE_BOTTOM:
+        if(1 ==input){
+            state = DB_STATE_UP;
+            std::cout<<"Der aktuelle Status ist UP: " <<std::endl;
+        }  
+        else{
+          std::cout<<"Der aktuelle Status ist BOTTOM: " <<std::endl;
+        }
+        break;
+    }
+  }
+
+
+
+       
+
+void sleep_ms(int milliseconds) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+
+
+
 auto main(int argc, char **argv) -> int
 {
-    /**
-     * CLI11 is a command line parser to add command line options
-     * More info at https://github.com/CLIUtils/CLI11#usage
-     */
-    CLI::App app{PROJECT_NAME};
-    try
+
+    std::cout << "Aktueller Status: Bottom" << std::endl;
+
+
+     while( 1==1 )
     {
-        app.set_version_flag("-V,--version", fmt::format("{} {}", PROJECT_VER, PROJECT_BUILD_DATE));
-        app.parse(argc, argv);
-    }
-    catch (const CLI::ParseError &e)
-    {
-        return app.exit(e);
+      stateMachine();
+      sleep_ms(100);
     }
 
-    /**
-     * The {fmt} lib is a cross platform library for printing and formatting text
-     * it is much more convenient than std::cout and printf
-     * More info at https://fmt.dev/latest/api.html
-     */
-    fmt::print("Hello, {}!\n", app.get_name());
-
-    /* INSERT YOUR CODE HERE */
 
     return 0; /* exit gracefully*/
 }
